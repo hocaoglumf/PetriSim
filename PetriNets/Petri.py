@@ -63,6 +63,9 @@ class PetriNet:
         self.transitionFacts={}
 
 
+    def GetConsumedDuration(self,transition):
+        return self.consumedTransitionDuration[transition]
+
     def AssertFacts(self, eventFireAux):
         for i in list(eventFireAux.keys()):
             if eventFireAux[i]==1:
@@ -231,15 +234,21 @@ class PetriNet:
             if (self.transitionDuration[i]>=min and self.EventCondition(j)):
                 self.transitionDuration[i]= self.transitionDuration[i]- min
                 self.consumedTransitionDuration[i] +=min
+                if self.transitionDuration[i]==0:
+                    self.CallExitFunctions(i,min)
                 if self.transitionstates[i]>0:
                     if (self.transitionDuration[i]>0 and i in self.timeGrantFunctions):
                         self.ownerModel.Factory(self.timeGrantFunctions[i],min)
                 if self.transitionstates[i]==2:
                     self.transitionDuration[i]=0
                     self.consumedTransitionDuration[i]=min
+                    try:
+                        self.ownerModel.Factory(self.timeGrantFunctions[i],min)
+                    except ValueError:
+                        print(self.ownerModel.GetName(), "  ", self.timeGrantFunctions[i])
 
-       # self.ownerModel.SetTime(self.ownerModel.GetTime()+min)
-        self.CallExitFunctions(min)
+        # self.ownerModel.SetTime(self.ownerModel.GetTime()+min)
+
         return
 
     def FindMinimumTime(self):
@@ -460,14 +469,12 @@ class PetriNet:
         eventFireAux = self.eventFire
         return mntk, eventFireAux
 
-    def CallExitFunctions(self, min):
-        eventFireAux=self.eventFire
-        for i in eventFireAux.keys():
-            if (eventFireAux[i]==1 and self.transitionDuration[i]==0.00000):
-                try:
-                    self.ownerModel.Factory(self.exitFunctions[i],min)
-                except ValueError:
-                    print(self.ownerModel.GetName(), "  ",self.timeGrantFunctions[i])
+    def CallExitFunctions(self, transition, min):
+        try:
+            self.ownerModel.Factory(self.exitFunctions[transition], min)
+        except ValueError:
+            print(self.ownerModel.GetName(), "  ", self.exitFunctions[transition])
+
 
     def FireEventVector(self):
         mtr=list(self.eventFire.values())

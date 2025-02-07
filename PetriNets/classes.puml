@@ -1,0 +1,32 @@
+@startuml classes
+set namespaceSeparator none
+class "SimulationEntity" as SimulationEntity.SimulationEntity {
+  factoryRef : NoneType
+  petri : NoneType
+  time : int
+  CheckTimeGrantCondition()
+  EventFireforTime()
+  EventandTime(min)
+  Factory(meth)
+  FindMinTime()
+  FireEventsForTime(min)
+  GetChat()
+  GetPlaces()
+  GetSimulationName()
+  GetTime()
+  GetTokenNumber(place)
+  Initialize()
+  ProcessDuration(min)
+  PutToken(place, token)
+  SetChat(c)
+  SetExitFunctions(f)
+  SetName(name)
+  SetPetri(petri)
+  SetProcessDurations()
+  SetState(state)
+  SetTime(time)
+  SetTimeGrantFunctions(f)
+  SetTransitionDurationCalculation(dc)
+  null()
+}
+@enduml

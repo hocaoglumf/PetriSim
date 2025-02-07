@@ -1,0 +1,1 @@
+:-dynamic parent/2.

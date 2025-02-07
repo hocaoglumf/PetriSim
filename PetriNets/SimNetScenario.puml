@@ -1,0 +1,11 @@
+@startuml
+class SimNetScenario {
+  - __scenarioCoordinators: list
+  - __speedList: list
+  + __init__()
+  + Join(scenario: any)
+  + Run(replication: any)
+}
+
+SimNetScenario ..> PetriCoordinator : <<uses>>
+@enduml

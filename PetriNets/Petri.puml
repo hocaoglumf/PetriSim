@@ -1,0 +1,96 @@
+@startuml
+class Duration {
+  - duration: int
+  + __init__(dur: int)
+  + isInf(): bool
+}
+
+class Transition {
+  - ruleFunction: str
+  - priority: int
+  - exitfunction: str
+  - timeGrantFunction: str
+  - durationCalculation: str
+  + __init__(priority: int, Rule: str = "null")
+  + SetExitFunction(exitF: str)
+  + SetTimeGrantFunction(tgf: str)
+}
+
+class Token {
+  + __init__()
+}
+
+class PetriNet {
+  - __places: dict
+  - eventFire: dict
+  - eventPriority: dict
+  - transitionDurationCalculation: dict
+  - transitionDuration: dict
+  - transitionMatrix0: list
+  - transitionMatrix1: list
+  - transitionMatrix: list
+  - conflicting: list
+  - terminationTime: int
+  - functions: dict
+  - exitFunctions: dict
+  - timeGrantFunctions: dict
+  - guards: dict
+  - timeRequested: int
+  - __simName: str
+  - k: str
+  - ownerModel: dict
+  + __init__()
+  + SetOwner(owner: any)
+  + GetPlaces(): dict
+  + GetState(): list
+  + SetSimulationName(name: str)
+  + GetSimulationName(): str
+  + SetGuards(g: dict)
+  + SetFunctions(f: dict)
+  + SetExitFunctions(f: dict)
+  + SetTimeGrantFunctions(f: dict)
+  + SetSimulationDuration(duration: int)
+  + PrepareMatrix(transitionMatrix1: list): list
+  + SetEventPriority(eventPriority: dict)
+  + SetEventFire(s: dict)
+  + SetState(s: dict)
+  + SetTransitionDurationCalculation(transitionDurationCalculation: dict)
+  + SetTransitionMatrix(s0: list, s1: list)
+  + MatrisTopla(X: list, Y: list): list
+  + Transpose(A: list): list
+  + VektorXMatris(V: list, A: list): list
+  + VektorXVektor(V0: list, V1: list): int
+  + MatrisXMatris(A: list, B: list): list
+  + FindConflictingEvents()
+  + ProcessDuration(min: int)
+  + FindMinTime(): tuple
+  + EventCondition(e: int): bool
+  + EventGuard(event: any): bool
+  + EventFireforTime(): tuple
+  + EventFire(): bool
+  + Sum(x: list, y: list): list
+  + SetProcessDurationFirstTime()
+  + SetProcessDurations()
+  + ResetEventFire(eventFireAux: dict)
+  + ThereEventToFire(eventFireAux: dict): bool
+  + FireTheEvents(eventFireAux: dict): dict
+  + CallFunctions(func: any, duration: int)
+  + Initialize()
+  + EventFireControl(): tuple
+  + CallExitFunctions(min: int)
+  + EventFireProcess(eventFireAux: dict, min: int)
+  + UpdatePlaces(state: list)
+  + GetTokenNumber(place: any): int
+  + PutToken(place: any, n: int)
+  + EventandTime(min: int): bool
+  + CheckTimeGrantCondition(): bool
+  + TriggetTransitionsLog(events: dict)
+  + SelectHighestPriorityTransition()
+  + FireEventsForTime(min: int)
+  + FireEvents(min: int): bool
+}
+
+Duration -- Transition : <<uses>>
+PetriNet "1" -- "many" Transition
+PetriNet "1" -- "many" Token
+@enduml

@@ -1,0 +1,47 @@
+@startuml
+title Class Diagram for ConvertTime and PetriCoordinator
+
+class ConvertTime {
+    - time: float
+    + __init__(): void
+    + Convert(sn: float): str
+}
+
+class PetriCoordinator {
+    - petrinets: List
+    - clock: float
+    - terminationTime: float
+    - transitions: List
+    - timer: ConvertTime
+    - current_timeStart: datetime
+    - chat: bool
+
+    + __init__(): void
+    + SetExecutionDuration(exdur: float): void
+    + Join(p): void
+    + AttachTransition(t): void
+    + Initialize(): void
+    + FindMinTime(): Tuple
+    + ProcessDuration(min: float): float
+    + ProcessDurationMultiThread(min: float): float
+    + Transitions(): void
+    + Transition(pFrom, placeFrom, weightFrom, pTo, placeTo, weightTo): void
+    + EventFireforTime(): void
+    + EventandTime(min: float): bool
+    + SetProcessDurations(): void
+    + SimLog(): void
+    + LogSimTime(): void
+    + GoodbyNote(): void
+    + SetChat(T: bool): void
+    + SimLegend(): void
+    + Reset(): void
+    + CalculateSpeed(): float
+    + CheckTimeGrantCondition(): bool
+    + ImmediateEventControl(step: float): void
+    + SetClock(): void
+    + FireEventsForTime(min: float): void
+    + Run(): float
+}
+
+PetriCoordinator "1" --> "1" ConvertTime
+@enduml

@@ -61,6 +61,7 @@ class PetriNet:
         self.ownerModel={}
         self.prolog= pprolog.PetriProlog()
         self.transitionFacts={}
+        self.transitionPredicates={}
 
 
     def GetConsumedDuration(self,transition):
@@ -236,6 +237,7 @@ class PetriNet:
                 self.consumedTransitionDuration[i] +=min
                 if self.transitionDuration[i]==0:
                     self.CallExitFunctions(i,min)
+                    self.CallExitPredicate(i)
                 if self.transitionstates[i]>0:
                     if (self.transitionDuration[i]>0 and i in self.timeGrantFunctions):
                         self.ownerModel.Factory(self.timeGrantFunctions[i],min)
@@ -469,6 +471,20 @@ class PetriNet:
         eventFireAux = self.eventFire
         return mntk, eventFireAux
 
+    def CallExitPredicate(self,transition):
+        pred=self.transitionPredicates[transition]
+        if (pred=="null"):
+            return
+        else:
+            res=self.prolog.Query(pred)
+            return res
+
+    def CallFiringPredicate(self,transition):
+        pass
+
+    def CallExternalTransitionPredicate(selftransition):
+        pass
+
     def CallExitFunctions(self, transition, min):
         try:
             self.ownerModel.Factory(self.exitFunctions[transition], min)
@@ -491,7 +507,7 @@ class PetriNet:
 
     def EventFireProcess(self, eventFireAux,min ):
         self.CalculateTransitionMatrix()
-        self.CallExitFunctions(min)
+        #self.CallExitFunctions(min)
         while self.ThereEventToFire(eventFireAux):
             self.FireTheEvents(eventFireAux)
             mtr = []
@@ -502,6 +518,9 @@ class PetriNet:
             self.UpdatePlaces(state)
             # Burada factler atanıyor
             self.AssertFacts(eventFireAux)
+            for i in self.eventFire:
+                self.CallExitFunctions(i,0)
+                self.CallExitPredicate(i)
 
             self.ResetEventFire(eventFireAux)
 

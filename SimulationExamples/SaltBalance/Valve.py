@@ -8,26 +8,23 @@ class Valve(PetriNets.SimulationEntity.SimulationEntity):
         super().__init__()
         self.factoryRef = None
     def Initialize(self):
-        transitionGuards = {"t0": "null", "t1": "null", "t2":"isFreeFall", "t3":"isBouncing", "t4":"null", "t5":"Stop"}
-        timeGrantFunctions={"t0": "null", "t1": "null", "t2":"null", "t3":"null", "t4":"null", "t5":"null"}
-        exitFunctions={"t0": "null", "t1": "FreeFall", "t2":"null", "t3":"null", "t4":"Bouncing", "t5":"null"}
+        transitionGuards = {"turningOn": "null", "t0": "null", "turningOff":"null"}
+        timeGrantFunctions={"turningOn": "null", "t0": "null", "turningOff":"null"}
+        exitFunctions={"turningOn": "null", "t0": "null", "turningOff":"null"}
 
-        state0 = {"P0": 1, "P1": 1, "P2": 0, "P3": 0,"P4":0, "P5":0}
+        state0 = {"On": 1, "Off": 0, "OutPort0": 0, "OutPort1": 0,"SetFlowRate":1}
         #eventPriority = {"t0": PetriNets.Petri.Transition(1), "t1": PetriNets.Petri.Transition(1)}
-        eventPriority = {"t0": 1, "t2": 1,"t3":1, "t5":2}
-        transitionMatrix0 = [[-1, -1, 1, 0, 0, 0],
-                             [ 0,  0,-1, 1, 0, 0],
-                             [ 1,1,0,-1,0,0],
-                             [0,0,0,-1,1,0],
-                             [1,1,0,0,-1,0],
-                             [0,0,0,-1,0,1]]
+        eventPriority = {"turningOn": 1, "t0": 1, "turningOff":1}
+        transitionMatrix0 = [[-1, 1, 1, 0, 0],
+                             [1, -1, 1, 1, -1],
+                             [0, [-1,1], 0, 1, 0]]
 
         petri= PetriNets.Petri.PetriNet()
         self.SetPetri(petri)
         self.petri.SetGuards(transitionGuards)
         self.petri.SetTimeGrantFunctions(timeGrantFunctions)
         self.petri.SetExitFunctions(exitFunctions)
-        self.petri.SetTransitionMatrix(transitionMatrix0, transitionMatrix1)
+        self.petri.SetTransitionMatrix(transitionMatrix0)
         self.petri.SetState(state0)
         self.petri.SetEventPriority(eventPriority)
         self.petri.SetOwner(self)

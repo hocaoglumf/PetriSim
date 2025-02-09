@@ -118,3 +118,6 @@ class SimulationEntity:
 
     def ResetEventVector(self):
         self.petri.ResetEventVector()
+        
+    def Query(self,query):
+        return self.petri.prolog.Query(query)

@@ -19,7 +19,7 @@ sirKb=["beta(0.3)",
 sir.SetKb(sirKb)
 
 Result=sir.Query("simulatedays(SNext,INext,RNext,1)")
-print(Result)
+print(Result)irKb=
 Result=sir.Query("simulatedays(SNext,INext,RNext,1)")
 print(Result)
 '''

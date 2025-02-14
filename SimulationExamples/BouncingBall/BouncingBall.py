@@ -47,6 +47,7 @@ class Ball(PetriNets.SimulationEntity.SimulationEntity):
         self.petri.SetState(state0)
         self.petri.SetEventPriority(eventPriority)
         self.petri.SetOwner(self)
+        self.petri.transitionPredicates ={"t0": "null", "t1": "null", "t2":"null", "t3":"null", "t4":"null", "t5":"null"}
 
         self.factoryRef = self#globals()['Ball']()
 

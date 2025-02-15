@@ -228,7 +228,13 @@ class PetriNet:
             if (s>1):
                 self.conflicting.append(cnf)
         return
+    def Validation(self):
+        for i in list(self.__places.keys()):
+            if self.__places[i]<0:
+                print("Invalid place token number....")
+
     def ProcessDuration(self,min):
+        self.Validation()
         j=-1
         for i in self.transitionDuration.keys():
             j +=1
@@ -251,6 +257,7 @@ class PetriNet:
 
         # self.ownerModel.SetTime(self.ownerModel.GetTime()+min)
 
+        self.Validation()
         return
 
     def FindMinimumTime(self):
@@ -497,6 +504,7 @@ class PetriNet:
         res = self.MatrisXMatris(mtr, self.transitionMatrix)
         state = self.Sum(self.GetState(), res)
         self.UpdatePlaces(state)
+        self.Validation()
 
     def NoEvent(self):
         return sum(self.eventFire.values())

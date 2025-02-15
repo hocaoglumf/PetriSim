@@ -9,7 +9,7 @@ gen=generator.Generator()
 gen.Initialize()
 gen.SetType("Generator")
 gen.SetName("Generator")
-gen.SetTransitionDurationCalculation({"t4": 10})
+gen.SetTransitionDurationCalculation({"t4": 2})
 gen.SetTransitionStates({"t4":0}) #There is no transition that is external transition allowed
 
 cons0=consumer.Consumer()

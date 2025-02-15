@@ -15,7 +15,7 @@ class Consumer(PetriNets.SimulationEntity.SimulationEntity):
 
         state0 = {"inPort":0,"P0": 1, "P1": 0, "P2":0, "P3":0, "outPort":0}
 
-        eventPriority = {"t0": 1,"t1": 1,"t2": 1,"t3": 1}
+        eventPriority = {"t0": 1,"t1": 1,"t2": 1,"t3": 2}
         transitionMatrix = [[ 0, 1, 0,-1, 0, 0],
                             [-1,-1, 1, 0, 0, 0],
                             [ 0, 1,-1, 0, 1, 1],

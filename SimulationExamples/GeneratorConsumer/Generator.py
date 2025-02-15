@@ -35,7 +35,7 @@ class Generator(PetriNets.SimulationEntity.SimulationEntity):
         j=None
         for i in self.connectedEntities:
             x=i.GetTokenNumber("inPort")
-            if x<mn:
+            if x<mn and i.GetTokenNumber("P2") ==0:
                 j=i
                 mn=x
         return j

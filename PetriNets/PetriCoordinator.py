@@ -207,11 +207,22 @@ class PetriCoordinator:
         for i in self.petrinets:
             i.FireEventsForTime(min)
 
+    def ImmediateConflictControl(self,petri):
+        max=0
+        for event, fired in petri.petri.eventFire.items():
+            pri=petri.petri.eventPriority[event]
+            if fired>0 and pri>max:
+                max =pri
+        for i in list(petri.petri.eventFire.keys()):
+            if petri.petri.eventPriority[i]<max:
+                petri.petri.eventFire[i]=0
+
     def ImmediateTransitions(self):
         for i in self.petrinets:
             immediateCont=True
             while immediateCont:
                 immediateCont, events = i.ImmediateTransitions()
+                self.ImmediateConflictControl(i)
                 if immediateCont:
                     if immediateCont:
                         i.FireEventVector()

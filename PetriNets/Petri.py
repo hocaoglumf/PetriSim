@@ -534,8 +534,18 @@ class PetriNet:
     def GetTokenNumber(self,place):
         return self.__places[place]
 
+    def PlacewithMinToken(self):
+        minplace,minimum=self.__places.items()
+        for i,j in self.__places.items():
+            if j<minimum:
+                minplace, minimum=i,j
+        return minplace,minimum
+
     def PutToken(self,place, n):
         self.__places[place]=self.__places[place] + n
+
+    def ResetToken(self,place):
+        self.__places[place]=0
 
     def EventandTime(self, min):
         return self.FireEvents(min)

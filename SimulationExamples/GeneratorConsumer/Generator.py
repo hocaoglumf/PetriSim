@@ -29,3 +29,20 @@ class Generator(PetriNets.SimulationEntity.SimulationEntity):
         self.petri.transitionPredicates ={"t4":"null"}
 
         self.factoryRef = self
+
+    def GetMinQueue(self):
+        mn=9999
+        j=None
+        for i in self.connectedEntities:
+            x=i.GetTokenNumber("inPort")
+            if x<mn:
+                j=i
+                mn=x
+        return j
+
+    def MinimumOne(self,x ):
+        j=self.GetMinQueue()
+        return int(j==x)
+
+
+

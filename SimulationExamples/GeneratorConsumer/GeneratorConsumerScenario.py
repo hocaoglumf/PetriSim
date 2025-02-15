@@ -33,9 +33,15 @@ gen.SetChat(True)
 cons0.SetChat(True)
 pc.Join(gen)
 
+gen.AttachConnectedEntity(cons0)
+gen.AttachConnectedEntity(cons1)
+
+#gen.AttachPort("Consumer","P5",1,"inPort",1)
+gen.AttachPort(cons0,"P5",1,"inPort",gen.MinimumOne(cons0))
+gen.AttachPort(cons1,"P5",1,"inPort",gen.MinimumOne(cons1))
 
 
-pc.AttachTransition([gen,"P5", 1, cons0, "inPort",1])
+#pc.AttachTransition([gen,"P5", 1, cons0, "inPort",1])
 
 pc.SetExecutionDuration(50)
 pc.SetChat(True)

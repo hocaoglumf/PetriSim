@@ -44,6 +44,7 @@ class PetriCoordinator:
     def AttachTransition(self,t):
         self.transitions.append(t)
 
+
     def Initialize(self):
         for i in self.petrinets:
             i.Initialize()
@@ -93,6 +94,9 @@ class PetriCoordinator:
         return min
 
     def Transitions(self):
+        for i in self.petrinets:
+            i.Transitions()
+
         for i in self.transitions:
             self.Transition(i[0], i[1],i[2],i[3],i[4],i[5])
 

@@ -26,5 +26,6 @@ class Generator(PetriNets.SimulationEntity.SimulationEntity):
         self.petri.SetState(state0)
         self.petri.SetEventPriority(eventPriority)
         self.petri.SetOwner(self)
+        self.petri.transitionPredicates ={"t4":"null"}
 
         self.factoryRef = self

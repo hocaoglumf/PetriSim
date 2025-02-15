@@ -175,7 +175,7 @@ class PetriCoordinator:
             speed =round(self.clock*10**6 / (diff.microseconds), 3)
         except ZeroDivisionError:
             print("Zero div. !")
-        print("Speed : ", speed,"X", "  Execution Duration: ", diff.microseconds*10**-6, " sec.")
+        print("Speed : ", speed,"X", "  Execution Duration: ", diff.seconds, " sec.")
         return speed
 
     def CheckTimeGrantCondition(self):

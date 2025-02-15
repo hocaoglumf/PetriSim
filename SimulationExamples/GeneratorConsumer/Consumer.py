@@ -30,6 +30,7 @@ class Consumer(PetriNets.SimulationEntity.SimulationEntity):
         self.petri.SetState(state0)
         self.petri.SetEventPriority(eventPriority)
         self.petri.SetOwner(self)
+        self.petri.transitionPredicates ={"t0": "null","t1": "null","t2": "null","t3": "null"}
         self.SetTransitionStates({"t0": 0, "t1": 0, "t2": 0, "t3": 0})  # There is no transition that is external transition allowed
 
         self.factoryRef = self

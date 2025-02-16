@@ -54,7 +54,7 @@ class Sir(PetriNets.SimulationEntity.SimulationEntity):
 
         self.petri.SetTransitionFacts({"initial": [beta,gamma,sir], "t0": "null", "t1":"null", "t2":"null"})
         self.petri.transitionPredicates={"initial":"null","t0":"null","t1":"simulatedays(SNext,INext,RNext,1)", "t2":"null"}
-
+        self.petri.SetEventPriority({"initial":1,"t0":1,"t1":1, "t2":1})
     def LastState(self):
         res=self.Query("simulatedays(SNext,INext,RNext,1)")
         print("The Last Satete : ",res,"*")

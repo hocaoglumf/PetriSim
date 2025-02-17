@@ -70,7 +70,11 @@ class SimulationEntity:
 
 
     def SetProcessDurations(self):
-        self.petri.SetProcessDurations()
+        found, reseting = self.petri.SetProcessDurations()
+        return found, reseting
+
+    def ResetConsumedTime(self,L):
+        self.petri.ResetConsumedTime(L)
 
     def SetState(self,state):
         self.petri.SetState(state)
@@ -151,3 +155,10 @@ class SimulationEntity:
                     self.ResetToken(i[1])
                     self.PutToken(i[1],myTokenNumber)
                     sent.append(i[1])
+
+    def GetConsumedDuration(self,t):
+        if t in list(self.petri.consumedTransitionDuration.keys()):
+            v= self.petri.consumedTransitionDuration[t]
+        else:
+            v=0
+        return v

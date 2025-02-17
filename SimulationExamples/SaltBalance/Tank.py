@@ -7,7 +7,7 @@ class Tank(PetriNets.SimulationEntity.SimulationEntity):
     def __init__(self):
         super().__init__()
         self.factoryRef = None
-        self.m=100
+        self.m=220
 
 
     def Initialize(self):
@@ -17,9 +17,9 @@ class Tank(PetriNets.SimulationEntity.SimulationEntity):
 
         state0 = {"P0": 1, "P1": 1, "InPort0": 0, "InPort1": 0,"C0":0, "V0":0,"S0":0}
         eventPriority = {"t0": 1, "T0": 1,"t1":1}
-        transitionMatrix = [[-1, 1, -1, 0, "Att:m:-1", 0,0],
+        transitionMatrix = [[-1, 1, -1, 0, "Att:m:1", 0,0],
                             [1, -1, 0, -1, "#:C0:-1", 0,0],
-                            [0, 0, 0, 0, "Meth:Vol:-1", "Meth:Vol:1", "Meth:qf:1"]]
+                            [0, 0, 0, 0, "#:C0:-1", "Meth:Vol:1", "Meth:qf:1"]]
 
         self.consumedTransitionDuration={"t0": 0, "T0": 0,"t1":0}
         petri= PetriNets.Petri.PetriNet()
@@ -31,8 +31,11 @@ class Tank(PetriNets.SimulationEntity.SimulationEntity):
         self.petri.SetState(state0)
         self.petri.SetEventPriority(eventPriority)
         self.petri.SetOwner(self)
+        self.petri.transitionPredicates ={"t0": "null", "T0": "null", "t1":"null"}
 
         self.factoryRef = self#globals()['Ball']()
+        self.SetTransitionDurationCalculation({"t0": -1, "T0": -1, "t1": "Meth:Duration"})
+        self.SetTransitionStates({"t0": 0, "T0": 0, "t1": 1})  # There is transition that is external transition allowed
 
     def SetAmount(self,a):
         self.m=a
@@ -48,9 +51,16 @@ class Tank(PetriNets.SimulationEntity.SimulationEntity):
         return 9 * (.2 * (1 + math.cos(t))) - 6 * (q / (600 + 3 * t))
 
     def Vol(self):
-        t = self.consumedTransitionDuration["t1"]
+        t = self.GetConsumedDuration("t1")
         flowRate=0
         for i in self.connectedEntities:
             flowRate +=i.flowRate
         return t*flowRate
 
+    def Duration(self):
+        flowRate=0
+        for i in self.connectedEntities:
+            flowRate +=i.flowRate
+        if flowRate==0:
+            return 99999999
+        return self.m/flowRate

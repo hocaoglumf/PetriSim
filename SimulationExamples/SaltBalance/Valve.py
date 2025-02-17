@@ -9,9 +9,9 @@ class Valve(PetriNets.SimulationEntity.SimulationEntity):
         self.factoryRef = None
         self.flowRate=10
     def Initialize(self):
-        transitionGuards = {"turningOn": "null", "turningOff":"null","t0": "null"}
-        timeGrantFunctions={"turningOn": "null", "turningOff":"null","t0": "null"}
-        exitFunctions={"turningOn": "null", "turningOff":"null", "t0": "null"}
+        transitionGuards = {"turningOn":"null", "turningOff": "null", "t0": "null"}
+        timeGrantFunctions={"turningOn":"null", "turningOff": "null", "t0": "null"}
+        exitFunctions={"turningOn":"null", "turningOff": "null", "t0": "null"}
 
         state0 = {"On": 1, "Off": 0, "OutPort0": 0, "OutPort1": 0,"SetFlowRate":1}
         #eventPriority = {"t0": PetriNets.Petri.Transition(1), "t1": PetriNets.Petri.Transition(1)}
@@ -29,5 +29,9 @@ class Valve(PetriNets.SimulationEntity.SimulationEntity):
         self.petri.SetState(state0)
         self.petri.SetEventPriority(eventPriority)
         self.petri.SetOwner(self)
+        self.petri.transitionPredicates = {"turningOn":"null", "turningOff": "null", "t0": "null"}
+
+        self.SetTransitionDurationCalculation({"turningOn": 10, "turningOff": 2000, "t0": 1000})
+        self.SetTransitionStates({"turningOn": 0, "turningOff": 0, "t0": 0})  # There is no transition that is external transition allowed
 
         self.factoryRef = self#globals()['Ball']()

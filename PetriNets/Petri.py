@@ -238,6 +238,8 @@ class PetriNet:
         j=-1
         for i in self.transitionDuration.keys():
             j +=1
+            if self.transitionDuration[i]==-1:
+                self.consumedTransitionDuration[i] += min
             if (self.transitionDuration[i]>=min and self.EventCondition(j)):
                 self.transitionDuration[i]= self.transitionDuration[i]- min
                 self.consumedTransitionDuration[i] +=min
@@ -247,7 +249,7 @@ class PetriNet:
                 if self.transitionstates[i]>0:
                     if (self.transitionDuration[i]>0 and i in self.timeGrantFunctions):
                         self.ownerModel.Factory(self.timeGrantFunctions[i],min)
-                if self.transitionstates[i]==2:
+                if self.transitionstates[i]==1:
                     self.transitionDuration[i]=0
                     self.consumedTransitionDuration[i]=min
                     try:
@@ -301,16 +303,19 @@ class PetriNet:
             if kp:
                 nmbr=self.transitionMatrix[e][i]
                 r = nmbr < 0
+                sayac +=int(r)
             if d:
                 liste=self.transitionMatrix0[e][i]
                 nmbr=min(liste)
                 r=nmbr<0
+                sayac +=int(r)
             if (r):
                 howmanytokens=self.GetState()[i]
                 t= t and howmanytokens>=abs(nmbr) and howmanytokens>0
                 #t = t and self.GetState()[i] !=0
                 #t = t and xx
-
+        if sayac ==0:
+            t=False
         return t
 
     def EventGuard(self, event):
@@ -332,7 +337,7 @@ class PetriNet:
             self.eventFire[i] = int(cntrl)
             mntk = mntk or cntrl
 
-        mintime=99999999999
+        mintime=10**20
         founds=[]
         for i in self.eventFire.keys():
             if (float(self.transitionDuration[i])<=mintime and self.eventFire[i]==1):
@@ -398,6 +403,16 @@ class PetriNet:
             sum.append(x[i]+y[i])
         return sum
 
+    def CalculateProcessDuration(self, func):
+        entry = func.split(":")
+        if entry[0].lower()=="meth":
+            v = self.ownerModel.Factory(entry[1])
+        elif entry[0].lower()=="att":
+            v=c*getattr(self.ownerModel, entry[1])
+        else:
+            v=99999999
+        return v
+
     def SetProcessDurationFirstTime(self):
         karakter=type("k")
         j=-1
@@ -407,9 +422,11 @@ class PetriNet:
             self.consumedTransitionDuration[i]=0
             if (type(self.transitionDurationCalculation[i]) == karakter and cntrl):
                 func = self.transitionDurationCalculation[i]
-                self.transitionDuration[i] = round(eval(func),3)
+                v=self.CalculateProcessDuration(func)
+                self.transitionDuration[i]=v
+                #self.transitionDuration[i] = round(eval(func),3)
             elif (type(self.transitionDurationCalculation[i]) == karakter and not(cntrl)):
-                self.transitionDuration[i]=-1
+                self.transitionDuration[i]=0
             else:
                 self.transitionDuration[i] = self.transitionDurationCalculation[i]
         return
@@ -418,25 +435,39 @@ class PetriNet:
         karakter=type("k")
         durationFound = -1
         j=-1
+        reseting=[]
         for i in self.transitionDurationCalculation.keys():
             dr = self.transitionDuration[i]
+            '''
+            if type(self.transitionDurationCalculation[i])==str :
+                func = self.transitionDurationCalculation[i]
+                entry=func.split(":")
+                dr = self.ownerModel.Factory(entry[1])
+                self.transitionDuration[i]=dr'''
             j +=1
             cntrl = self.EventCondition(j)
             self.eventFire[i]=0
             if (dr ==0):
                 if (type(self.transitionDurationCalculation[i])==karakter and cntrl ):
                     func=self.transitionDurationCalculation[i]
-                    durationFound = round(eval(func),3)
-                    self.transitionDuration[i] = durationFound
-                    self.consumedTransitionDuration[i] = 0
+                    #durationFound = round(eval(func),3)
+                    func = self.transitionDurationCalculation[i]
+                    v = self.CalculateProcessDuration(func)
+                    self.transitionDuration[i] = v
+                    #self.consumedTransitionDuration[i] = 0
+                    reseting.append(i)
                     self.eventFire[i]=1
                 elif (type(self.transitionDurationCalculation[i])==karakter and not(cntrl)):
-                    self.transitionDuration[i] =-1
+                    self.transitionDuration[i] =0
                     self.eventFire[i] = 0
                 else:
                     self.transitionDuration[i] = self.transitionDurationCalculation[i]
                     self.eventFire[i] = int(cntrl)
-        return durationFound
+        return durationFound, reseting
+
+    def ResetConsumedTime(self,Liste):
+        for i in Liste:
+            self.consumedTransitionDuration[i]=0
 
     def ResetEventFire(self, eventFireAux):
         for i in self.eventFire.keys():
@@ -500,6 +531,7 @@ class PetriNet:
 
 
     def FireEventVector(self):
+        self.CalculateTransitionMatrix()
         mtr=list(self.eventFire.values())
         res = self.MatrisXMatris(mtr, self.transitionMatrix)
         state = self.Sum(self.GetState(), res)

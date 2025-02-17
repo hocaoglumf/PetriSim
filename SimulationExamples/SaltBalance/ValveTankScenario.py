@@ -4,22 +4,21 @@ import PetriNets.PetriCoordinator as Pc
 
 
 tank=ss.Tank()
+valve=vl.Valve()
+tank.AttachConnectedEntity(valve)
+
 tank.Initialize()
 tank.SetName("Tank")
-tank.SetTransitionDurationCalculation({"t0": -1, "T0": 2000, "t1":1})
-tank.SetTransitionStates({"t0":0,"T0":1,"t1":0}) #There is transition that is external transition allowed
 
-valve=vl.Valve()
 valve.Initialize()
 valve.SetName("Valve")
-tank.SetTransitionDurationCalculation({"turnOn": -1, "turnOff": 2000, "t0":1})
-tank.SetTransitionStates({"turnOn":0,"turnOff":0,"t0":0}) #There is no transition that is external transition allowed
 
-tank.AttachConnectedEntity(valve)
+valve.AttachPort(tank, "OutPort0",1,"InPort0",1)
 
 pc=Pc.PetriCoordinator()
 tank.SetChat(True)
 pc.Join(tank)
+pc.Join(valve)
 pc.SetExecutionDuration(20000)
 pc.SetChat(True)
 pc.Run()

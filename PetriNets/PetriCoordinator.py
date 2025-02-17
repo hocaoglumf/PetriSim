@@ -52,7 +52,7 @@ class PetriCoordinator:
     def FindMinTime(self):
         gk=""
         simName=""
-        min = 999999999999999
+        min = 10**20
         for i in self.petrinets:
             name=i.GetSimulationName()
             try:
@@ -60,7 +60,7 @@ class PetriCoordinator:
             except:
                 print("There is something wrong!")
             if (minf <=0):
-                minf =9999999999999
+                minf =10**20
             if (min > minf):
                 simName=name
                 min =minf
@@ -119,14 +119,15 @@ class PetriCoordinator:
 
     def SetProcessDurations(self):
         for i in self.petrinets:
-            i.SetProcessDurations()
+            found,reseting=i.SetProcessDurations()
             i.FireEventVector()
+            i.ResetConsumedTime(reseting)
 
     def SimLog(self,step):
         if (self.chat):
             for i in self.petrinets:
                 if (i.GetChat()):
-                    if step<99999999:
+                    if step<10**20:
                         print(i.GetSimulationName(), "  ", i.GetPlaces(), " Time: ",i.GetTime())
                     else:
                         print(i.GetSimulationName(), "  ", i.GetPlaces(), " Time: -")
@@ -226,11 +227,12 @@ class PetriCoordinator:
                 if immediateCont:
                     if immediateCont:
                         i.FireEventVector()
+                        i.petri.SetProcessDurations()
                         # Firing burada ateşleme yapılacak
         return
 
     def FindMinimumTime(self):
-        minT=99999999
+        minT=10**20
         for i in self.petrinets:
             found, mtk=i.FindMinimumTime()
             if minT>found:
@@ -252,15 +254,17 @@ class PetriCoordinator:
             self.ResetEventVector()
             self.ImmediateTransitions()
             self.Transitions()
+            self.ImmediateTransitions()
             # Find Min time
             minTime=self.FindMinimumTime()
             # Time Grand
             self.ProcessDuration(minTime)
             self.clock +=minTime
             self.SetProcessDurations()
-            self.Transitions()
+#            self.Transitions()
+#            self.ImmediateTransitions()
             self.SimLog(minTime)
-            if self.NoEvent():
+            if self.NoEvent() and minTime<=10**19:
                 print("There is nothing to do. Goodbye cruel world...")
                 return self.CalculateSpeed()
 
@@ -270,7 +274,7 @@ class PetriCoordinator:
                 return self.CalculateSpeed()
 
     def GetMinNumberofToken(self,type,place):
-        mintoken=99999999
+        mintoken=10**20
         for i in self.petrinets:
             if i.type==type:
                 n = i.GetTokenNumber(place)

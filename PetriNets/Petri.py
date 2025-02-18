@@ -62,6 +62,7 @@ class PetriNet:
         self.prolog= pprolog.PetriProlog()
         self.transitionFacts={}
         self.transitionPredicates={}
+        self.placeCapacities={}
 
 
     def GetConsumedDuration(self,transition):
@@ -536,6 +537,7 @@ class PetriNet:
         res = self.MatrisXMatris(mtr, self.transitionMatrix)
         state = self.Sum(self.GetState(), res)
         self.UpdatePlaces(state)
+        self.CheckPlaceCapacity()
         self.Validation()
 
     def NoEvent(self):
@@ -640,3 +642,9 @@ class PetriNet:
         return mntk
 
 
+    def CheckPlaceCapacity(self):
+        if len(self.placeCapacities.keys())==0:
+            return
+        for i in list(self.placeCapacities.keys()):
+            if self.__places[i]>self.placeCapacities[i] and self.placeCapacities[i]>0:
+                self.__places[i]=self.placeCapacities[i]

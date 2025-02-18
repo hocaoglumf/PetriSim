@@ -36,6 +36,7 @@ class Tank(PetriNets.SimulationEntity.SimulationEntity):
         self.factoryRef = self#globals()['Ball']()
         self.SetTransitionDurationCalculation({"t0": -1, "T0": -1, "t1": "Meth:Duration"})
         self.SetTransitionStates({"t0": 0, "T0": 0, "t1": 1})  # There is transition that is external transition allowed
+        self.SetPlaceCapacities({"P0": 1, "P1": 1, "InPort0": -1, "InPort1": -1,"C0":-1, "V0":-1,"S0":-1})
 
     def SetAmount(self,a):
         self.m=a

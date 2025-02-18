@@ -162,3 +162,10 @@ class SimulationEntity:
         else:
             v=0
         return v
+
+    def SetPlaceCapacities(self,capacities):
+        self.petri.placeCapacities=capacities
+
+    def SetPlaceCapacity(self,place, capacity):
+        self.petri.placeCapacities[place]=capacity
+

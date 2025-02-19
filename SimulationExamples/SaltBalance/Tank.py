@@ -56,6 +56,8 @@ class Tank(PetriNets.SimulationEntity.SimulationEntity):
         flowRate=0
         for i in self.connectedEntities:
             flowRate +=i.flowRate
+
+        self.m -=t*flowRate
         return t*flowRate
 
     def Duration(self):

@@ -31,6 +31,8 @@ cons1.SetTransitionDurationCalculation({"t0": 7, "t1": -1, "t2": 6, "t3": -1})
 
 gen.SetChat(True)
 cons0.SetChat(True)
+cons1.SetChat(True)
+
 pc.Join(gen)
 
 gen.AttachConnectedEntity(cons0)
@@ -43,7 +45,7 @@ gen.AttachPort(cons1,"P5",1,"inPort",gen.MinimumOne(cons1))
 
 #pc.AttachTransition([gen,"P5", 1, cons0, "inPort",1])
 
-pc.SetExecutionDuration(50)
+pc.SetExecutionDuration(150)
 pc.SetChat(True)
 
 pc.Run()

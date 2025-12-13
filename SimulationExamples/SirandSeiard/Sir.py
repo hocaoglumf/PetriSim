@@ -19,13 +19,13 @@ class Sir(PetriNets.SimulationEntity.SimulationEntity):
         timeGrantFunctions={"initial": "null", "t0": "null", "t1":"null", "t2":"null"}
         exitFunctions={"initial": "null", "t0": "LastState", "t1":"null", "t2":"null"}
 
-        state0 = {"P0": 1, "P1": 0, "P2": 0, "P3": 0}
+        state0 = {"P0": 1, "P1": 0, "P2": 0, "P3": 0, "S":0, "I":0,"R":0 }
         #eventPriority = {"t0": PetriNets.Petri.Transition(1), "t1": PetriNets.Petri.Transition(1)}
         eventPriority = {"initial":1,"t0": 1, "t2": 1}
-        transitionMatrix = [[-1, 1, 1, 0],
-                            [0,0,-1,1],
-                            [0,[-1,1],0,0],
-                            [0,-1,0,-1]]
+        transitionMatrix = [[-1, 1, 1, 0,0,0,0],
+                            [0,0,-1,1,0,0,0],
+                            [0,[-1,1],0,0,"Meth:GetSDiff","Meth:GetIDiff","Meth:GetRDiff"],
+                            [0,-1,0,-1,0,0,0]]
 
 
 
@@ -44,17 +44,30 @@ class Sir(PetriNets.SimulationEntity.SimulationEntity):
         gamma="gamma("+str(self.gamma)+")"
         S0,I0,R0=str(self.initialS),str(self.initialI),str(self.initialR)
         sir="sir("+S0+","+I0+","+R0+",0)"
-        sirKb = [beta, gamma, sir,
-                 "simulatedays(SNext,INext,RNext,Dt):-sir(SPrev, IPrev, RPrev, DayPrev), Day is Dt+DayPrev, beta(Beta),gamma(Gamma),SNext is SPrev-Beta*SPrev*IPrev*Dt, INext is IPrev+(Beta*SPrev*IPrev-Gamma*IPrev)*Dt, RNext is RPrev+Gamma*IPrev*Dt, asserta(sir(SNext,INext,RNext,Day)),!"]
+        sirKb = ["simulatedays(SNext,INext,RNext,Dt):-sir(SPrev, IPrev, RPrev, DayPrev),Day is Dt + DayPrev,beta(Beta), gamma(Gamma),diffS is Beta * SPrev * IPrev * Dt,diffI is (Beta * SPrev * IPrev - Gamma * IPrev) * Dt, diffR is Gamma * IPrev * Dt,SNext is SPrev - diffS, INext is IPrev + diffI, RNext is RPrev + diffR, retract(differences(_, _, _)), assert(differences(diffS, diffI, diffR)), asserta(sir(SNext, INext, RNext, Day)), !"]
         self.SetKb(sirKb)
         beta="beta("+str(self.beta)+")"
         gamma="gamma("+str(self.gamma)+")"
         S0,I0,R0=str(self.initialS),str(self.initialI),str(self.initialR)
         sir="sir("+S0+","+I0+","+R0+",0)"
 
-        self.petri.SetTransitionFacts({"initial": [beta,gamma,sir], "t0": "null", "t1":"null", "t2":"null"})
+        self.petri.SetTransitionFacts({"initial": ["differences(0,0,0)", beta,gamma,sir], "t0": "null", "t1":"null", "t2":"null"})
         self.petri.transitionPredicates={"initial":"null","t0":"null","t1":"simulatedays(SNext,INext,RNext,1)", "t2":"null"}
         self.petri.SetEventPriority({"initial":1,"t0":1,"t1":1, "t2":1})
     def LastState(self):
         res=self.Query("simulatedays(SNext,INext,RNext,1)")
-        print("The Last Satete : ",res,"*")
+        print("S:",res[0]["SNext"])
+        print("I:",res[0]["INext"])
+        print("R:",res[0]["RNext"])
+
+    def GetSDiff(self):
+        res=self.Query("differences(S,I,R)")
+        return res[0]["S"]
+
+    def GetIDiff(self):
+        res=self.Query("differences(S,I,R)")
+        return res[0]["I"]
+
+    def GetRDiff(self):
+        res=self.Query("differences(S,I,R)")
+        return res[0]["R"]

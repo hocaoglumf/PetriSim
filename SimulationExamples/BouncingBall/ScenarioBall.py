@@ -1,25 +1,27 @@
 
 import SimulationExamples.BouncingBall
-import BouncingBall
+import BouncingBall2
 import PetriNets.PetriCoordinator as Pc
 
-ball=BouncingBall.Ball()
+ball=BouncingBall2.Ball2()
 ball.Initialize()
 ball.SetName("Top1")
-ball.SetTransitionDurationCalculation({"t0": -1, "t1": 0.01, "t2":-1, "t3":-1, "t4":0.001, "t5":-1})
-ball.SetTransitionStates({"t0":0,"t1":0,"t2":0,"t3":0,"t4":0,"t5":0})
+ball.SetTransitionDurationCalculation({"Fall":0.1, "Bounce":0.01, "Stop":-1})
+ball.SetTransitionStates({"Fall":0,"Bounce":0, "Stop":0})
 
-ball0=BouncingBall.Ball()
+ball0=BouncingBall2.Ball2()
 ball0.Initialize()
 ball0.SetName("Top2")
-ball0.SetTransitionDurationCalculation({"t0": -1, "t1": 0.01, "t2":-1, "t3":-1, "t4":0.001, "t5":-1})
-ball0.SetTransitionStates({"t0":0,"t1":0,"t2":0,"t3":0,"t4":0,"t5":0})
+ball0.SetTransitionDurationCalculation({"Fall":0.1, "Bounce":0.01, "Stop":-1})
+ball0.SetTransitionStates({"Fall":0,"Bounce":0, "Stop":0})
 
-ball1= BouncingBall.Ball()
+
+ball1=BouncingBall2.Ball2()
 ball1.Initialize()
-ball1.SetName("Top3")
-ball1.SetTransitionDurationCalculation({"t0": -1, "t1": 0.01, "t2":-1, "t3":-1, "t4":0.001, "t5":-1})
-ball1.SetTransitionStates({"t0":0,"t1":0,"t2":0,"t3":0,"t4":0,"t5":0})
+ball1.SetName("Top1")
+ball1.SetTransitionDurationCalculation({"Fall":0.1, "Bounce":0.01, "Stop":-1})
+ball1.SetTransitionStates({"Fall":0,"Bounce":0, "Stop":0})
+
 
 pc= Pc.PetriCoordinator()
 ball.SetChat(True)

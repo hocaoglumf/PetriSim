@@ -13,6 +13,10 @@ class SimulationEntity:
         self.coordinator=None
         self.port=[]
         self.connectedEntities=[]
+        self.name=""
+
+    def SetName(self,name):
+        self.name=name
 
     def SetType(self,type):
         self.type=type

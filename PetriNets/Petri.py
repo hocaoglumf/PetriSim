@@ -232,7 +232,7 @@ class PetriNet:
     def Validation(self):
         for i in list(self.__places.keys()):
             if self.__places[i]<0:
-                print("Invalid place token number....@", self.ownerModel.)
+                print("Invalid place token number....@", self.GetSimulationName())
 
     def ProcessDuration(self,min):
         self.Validation()

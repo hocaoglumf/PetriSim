@@ -128,7 +128,7 @@ class PetriCoordinator:
             for i in self.petrinets:
                 if (i.GetChat()):
                     if step<10**20:
-                        print(i.GetSimulationName(), "  ", i.GetPlaces(), " Time: ",i.GetTime())
+                        print(i.GetSimulationName(), "  ", i.GetPlaces(), " Time: ",round(i.GetTime(),3))
                     else:
                         print(i.GetSimulationName(), "  ", i.GetPlaces(), " Time: -")
 
@@ -180,8 +180,8 @@ class PetriCoordinator:
             speed =round(self.clock*10**6 / (diff.microseconds), 3)
         except ZeroDivisionError:
             print("Zero div. !")
-        print("Speed : ", speed,"X", "  Execution Duration: ", diff.seconds, " sec.")
-        return speed
+        print("Speed : ", round(speed,5),"X", "  Execution Duration: ", diff.seconds, " sec.")
+        return round(speed,5)
 
     def CheckTimeGrantCondition(self):
         for i in self.petrinets:

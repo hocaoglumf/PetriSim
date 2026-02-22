@@ -1,9 +1,9 @@
 
 import SimulationExamples.BouncingBall
-import BouncingBall2
+import BouncingBall
 import PetriNets.PetriCoordinator as Pc
 
-ball=BouncingBall2.Ball2()
+ball=BouncingBall.Ball()
 ball.Initialize()
 ball.SetName("Top1")
 ball.SetTransitionDurationCalculation({"Fall":0.1, "Bounce":0.01, "Stop":-1})

@@ -3,7 +3,7 @@ import PetriNets.SimulationEntity
 import PetriNets.Petri
 import random
 import math
-class Ball2(PetriNets.SimulationEntity.SimulationEntity):
+class Ball(PetriNets.SimulationEntity.SimulationEntity):
     def __init__(self):
         super().__init__()
         self.factoryRef = None
@@ -23,15 +23,19 @@ class Ball2(PetriNets.SimulationEntity.SimulationEntity):
         self.y=[]
 
     def Initialize(self):
-        transitionGuards = {"Fall": "isFreeFall", "Bounce": "isBouncing","Stop":"Stop"}
-        timeGrantFunctions={"Fall": "null", "Bounce": "null", "Stop": "null" }
-        exitFunctions={"Fall": "FreeFall", "Bounce": "Bouncing", "Stop":"null"}
+        transitionGuards = {"t0": "null", "t1": "null", "t2":"isFreeFall", "t3":"isBouncing", "t4":"null", "t5":"Stop"}
+        timeGrantFunctions={"t0": "null", "t1": "null", "t2":"null", "t3":"null", "t4":"null", "t5":"null"}
+        exitFunctions={"t0": "null", "t1": "FreeFall", "t2":"null", "t3":"null", "t4":"Bouncing", "t5":"null"}
 
-        state0 = {"Fall": 1, "Stop": 0}
-        eventPriority = {"Fall": 1, "Bounce": 1, "Stop":1}
-        transitionMatrix = [[[-1,1],0],
-                            [[-1,1],0],
-                            [-1,1]]
+        state0 = {"P0": 1, "P1": 1, "P2": 0, "P3": 0,"P4":0, "P5":0}
+        #eventPriority = {"t0": PetriNets.Petri.Transition(1), "t1": PetriNets.Petri.Transition(1)}
+        eventPriority = {"t0": 1, "t2": 1,"t3":1, "t5":2}
+        transitionMatrix = [[-1, -1, 1, 0, 0, 0],
+                             [ 0,  0,-1, 1, 0, 0],
+                             [ 1,1,0,-1,0,0],
+                             [0,0,0,-1,1,0],
+                             [1,1,0,0,-1,0],
+                             [0,0,0,-1,0,1]]
 
 
         petri= PetriNets.Petri.PetriNet()
@@ -43,8 +47,8 @@ class Ball2(PetriNets.SimulationEntity.SimulationEntity):
         self.petri.SetState(state0)
         self.petri.SetEventPriority(eventPriority)
         self.petri.SetOwner(self)
-        self.petri.transitionPredicates ={"Fall": "null", "Bounce": "null", "Stop":"null"}
-        self.petri.SetEventPriority({"Fall":1,"Bounce":1,"Stop":2})
+        self.petri.transitionPredicates ={"t0": "null", "t1": "null", "t2":"null", "t3":"null", "t4":"null", "t5":"null"}
+        self.petri.SetEventPriority({"t0":1,"t1":1,"t2":1,"t3":1,"t4":1,"t5":1})
         self.factoryRef = self#globals()['Ball']()
 
     def FreeFall(self,dt):
@@ -92,10 +96,6 @@ class Ball2(PetriNets.SimulationEntity.SimulationEntity):
 
     def Stop(self):
         durmaSarti=self.h <=0.001 and abs(self.v)<0.0001
-
-        plt.xlabel("Time ")
-        plt.ylabel("h")
-        plt.title(self.GetSimulationName())
         if durmaSarti:
             plt.plot(self.x,self.y)
             plt.show()

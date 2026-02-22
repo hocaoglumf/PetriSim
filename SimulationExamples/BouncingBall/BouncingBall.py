@@ -93,10 +93,10 @@ class Ball(PetriNets.SimulationEntity.SimulationEntity):
     def Stop(self):
         durmaSarti=self.h <=0.001 and abs(self.v)<0.0001
 
-        plt.xlabel("Time ")
-        plt.ylabel("h")
-        plt.title(self.GetSimulationName())
         if durmaSarti:
+            plt.xlabel("Time ")
+            plt.ylabel("h")
+            plt.title(self.GetSimulationName())
             plt.plot(self.x,self.y)
             plt.show()
         return durmaSarti

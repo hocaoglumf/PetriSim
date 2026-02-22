@@ -18,7 +18,7 @@ ball0.SetTransitionStates({"Fall":0,"Bounce":0, "Stop":0})
 
 ball1=BouncingBall2.Ball2()
 ball1.Initialize()
-ball1.SetName("Top1")
+ball1.SetName("Top3")
 ball1.SetTransitionDurationCalculation({"Fall":0.1, "Bounce":0.01, "Stop":-1})
 ball1.SetTransitionStates({"Fall":0,"Bounce":0, "Stop":0})
 

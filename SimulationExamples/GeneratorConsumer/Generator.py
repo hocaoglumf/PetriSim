@@ -45,4 +45,8 @@ class Generator(PetriNets.SimulationEntity.SimulationEntity):
         return int(j==x)
 
 
+    def GetActiveConsumer(self):
+        for i in self.connectedEntities:
+            x=i.GetTokenNumber("P2")
+            return x
 

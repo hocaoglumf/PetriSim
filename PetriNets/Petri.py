@@ -584,10 +584,13 @@ class PetriNet:
         return minplace,minimum
 
     def PutToken(self,place, n):
+        if self.ownerModel.GetChat():
+            print(self.GetSimulationName(), ": I am putting ", n, " number of token(s) into the place ", place)
         self.__places[place]=self.__places[place] + n
 
     def ResetToken(self,place):
-        self.__places[place]=0
+        self.PutToken(place,0)
+        #self.__places[place]=0
 
     def EventandTime(self, min):
         return self.FireEvents(min)

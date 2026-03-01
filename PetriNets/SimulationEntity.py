@@ -13,6 +13,7 @@ class SimulationEntity:
         self.coordinator=None
         self.port=[]
         self.connectedEntities=[]
+        self.portDeclarations=[]
 
 
     def SetType(self,type):
@@ -137,7 +138,10 @@ class SimulationEntity:
     def AttachConnectedEntity(self,cntdentity):
         self.connectedEntities.append(cntdentity)
 
+
     def AttachPort(self, entity, myPlace,weight, targetplace, targetweight):
+        self.portDeclarations.append([entity, myPlace,weight, targetplace, targetweight])
+
         if type(entity)==str:
             for i in self.connectedEntities:
                 if i.type==entity:
@@ -145,17 +149,25 @@ class SimulationEntity:
         else:
             self.port.append([entity,myPlace,weight,targetplace,targetweight])
 
+
+    def UpdatePorts(self):
+        pass
+
+
     def Transitions(self):
         sent=[]
         for i in self.port:
             myTokenNumber=self.GetTokenNumber(i[1])
             if myTokenNumber>=i[2]:
                 i[0].PutToken(i[3], i[4])
-                if not(i[1] in sent):
-                    myTokenNumber =myTokenNumber-i[2]
-                    self.ResetToken(i[1])
-                    self.PutToken(i[1],myTokenNumber)
-                    sent.append(i[1])
+#                if not(i[1] in sent):
+#                    myTokenNumber =myTokenNumber-i[2]
+#                    self.ResetToken(i[1])
+#                    self.PutToken(i[1],myTokenNumber)
+#                    sent.append(i[1])
+
+        for i in self.port:
+            self.ResetToken(i[1])
 
     def GetConsumedDuration(self,t):
         if t in list(self.petri.consumedTransitionDuration.keys()):

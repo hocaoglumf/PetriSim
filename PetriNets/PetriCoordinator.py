@@ -282,6 +282,14 @@ class PetriCoordinator:
                     mintoken=n
         return mintoken
 
+    def GetNumberofTokens(self,type,place):
+        returnList={}
+        for i in self.petrinets:
+            if i.type==type:
+                n = i.GetTokenNumber(place)
+                returnList[i.GetSimulationName()]=n
+        return returnList
+
     def Run_ex(self):
         self.SimLegend()
         gk=""

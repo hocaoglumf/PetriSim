@@ -23,7 +23,7 @@ cons1=consumer.Consumer()
 cons1.SetType("Consumer")
 cons1.Initialize()
 cons1.coordinator=pc
-#pc.Join(cons1)
+pc.Join(cons1)
 cons1.SetName("Consumer1")
 
 cons0.SetTransitionDurationCalculation({"t0": 7, "t1": -1, "t2": 6, "t3": -1})
@@ -38,9 +38,9 @@ pc.Join(gen)
 gen.AttachConnectedEntity(cons0)
 gen.AttachConnectedEntity(cons1)
 
-#gen.AttachPort("Consumer","P5",1,"inPort",1)
-gen.AttachPort(cons0,"P5",1,"inPort",gen.MinimumOne(cons0))
-gen.AttachPort(cons1,"P5",1,"inPort",gen.MinimumOne(cons1))
+gen.AttachPort("Consumer","P5",1,"inPort",1)
+#gen.AttachPort(cons0,"P5",1,"inPort",gen.GetActiveConsumer)
+#gen.AttachPort(cons1,"P5",1,"inPort",gen.GetActiveConsumer)
 
 
 #pc.AttachTransition([gen,"P5", 1, cons0, "inPort",1])

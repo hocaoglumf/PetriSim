@@ -37,7 +37,11 @@ class Consumer(PetriNets.SimulationEntity.SimulationEntity):
 
     def BreakerNumber(self):
         y=self.coordinator.GetMinNumberofToken("Consumer","P2")
+        l=self.coordinator.GetNumberofTokens("Consumer","P2")
+        name=self.GetSimulationName()
+        l[name]=9999999
+        mn=min(list(l.values()))
         p3=self.GetTokenNumber("P3")
-        s=p3+y
+        s=p3+mn
         rr=max([s,self.N])
         return rr
